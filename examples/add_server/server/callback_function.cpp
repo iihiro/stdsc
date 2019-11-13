@@ -34,7 +34,7 @@ void CallbackFunctionForValueA::data_function(uint64_t code,
                                               stdsc::StateContext& state)
 {
     STDSC_THROW_CALLBACK_IF_CHECK(
-      kStateConnected <= state.current_state(),
+      kStateInit <= state.current_state(),
       "Warn: must be connected state to receive valueA.");
     std::cout << "Received valueA." << std::endl;
     param_.valueA = *static_cast<const uint32_t*>(buffer.data());
@@ -48,7 +48,7 @@ void CallbackFunctionForValueB::data_function(uint64_t code,
                                               stdsc::StateContext& state)
 {
     STDSC_THROW_CALLBACK_IF_CHECK(
-      kStateConnected <= state.current_state(),
+      kStateInit <= state.current_state(),
       "Warn: must be connected state to receive valueB.");
     std::cout << "Received valueB." << std::endl;
     std::cout << "Called " << __FUNCTION__ << std::endl;

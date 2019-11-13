@@ -30,12 +30,10 @@ namespace server
  */
 enum StateId_t : uint64_t
 {
-    kStateNil = 0,
-    kStateInit = 1,
-    kStateConnected = 2,
-    kStateReady = 3,
-    kStateComputed = 4,
-    kStateExit = 5,
+    kStateNil      = 0,
+    kStateInit     = 1,
+    kStateReady    = 2,
+    kStateComputed = 3,
 };
 
 /**
@@ -43,41 +41,25 @@ enum StateId_t : uint64_t
  */
 enum Event_t : uint64_t
 {
-    kEventConnectSocket = 0,
-    kEventDisconnectSocket = 1,
-    kEventReceivedValueA = 2,
-    kEventReceivedValueB = 3,
-    kEventReceivedComputeRequest = 4,
-    kEventReceivedResultRequest = 5,
-};
-
-/**
- * @brief Provides 'Init' state.
- */
-struct StateInit : public stdsc::State
-{
-    static std::shared_ptr<State> create();
-    StateInit(void);
-    virtual void set(stdsc::StateContext& sc, uint64_t event) override;
-    virtual uint64_t id(void) const override
-    {
-        return kStateInit;
-    }
+    kEventReceivedValueA         = 1,
+    kEventReceivedValueB         = 2,
+    kEventReceivedComputeRequest = 3,
+    kEventReceivedResultRequest  = 4,
 };
 
 /**
  * @brief Provides 'Connected' state.
  */
-struct StateConnected : public stdsc::State
+struct StateInit : public stdsc::State
 {
     static std::shared_ptr<stdsc::State> create(bool is_received_valueA = false,
                                                 bool is_received_valueB = false);
-    StateConnected(bool is_received_valueA = false,
+    StateInit(bool is_received_valueA = false,
                    bool is_received_valueB = false);
     virtual void set(stdsc::StateContext& sc, uint64_t event) override;
     virtual uint64_t id(void) const override
     {
-        return kStateConnected;
+        return kStateInit;
     }
 
 private:
@@ -113,19 +95,6 @@ struct StateComputed : public stdsc::State
     }
 };
 
-/**
- * @brief Provides 'Exit' state.
- */
-struct StateExit : public stdsc::State
-{
-    static std::shared_ptr<State> create();
-    StateExit(void);
-    virtual void set(stdsc::StateContext& sc, uint64_t event) override;
-    virtual uint64_t id(void) const override
-    {
-        return kStateExit;
-    }
-};
 
 } /* server */
 

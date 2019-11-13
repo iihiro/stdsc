@@ -16,19 +16,60 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <stdsc/stdsc_exception.hpp>
-#include <server/server.hpp>
+#include <stdsc/stdsc_callback_function_container.hpp>
+#include <stdsc/stdsc_server.hpp>
+#include <stdsc/stdsc_log.hpp>
+#include <share/packet.hpp>
+#include <share/define.hpp>
 #include <server/state.hpp>
+#include <server/callback_function.hpp>
+
+static void run()
+{
+    stdsc::StateContext state(std::make_shared<server::StateInit>());
+
+    stdsc::CallbackFunctionContainer callback;
+    server::CallbackParam param;
+    {
+        std::shared_ptr<stdsc::CallbackFunction> cb_valueA(
+            new server::CallbackFunctionForValueA(param));
+        callback.set(share::kControlCodeValueA, cb_valueA);
+
+        std::shared_ptr<stdsc::CallbackFunction> cb_valueB(
+            new server::CallbackFunctionForValueB(param));
+        callback.set(share::kControlCodeValueB, cb_valueB);
+
+        std::shared_ptr<stdsc::CallbackFunction> cb_compute(
+            new server::CallbackFunctionForComputeRequest(param));
+        callback.set(share::kControlCodeRequestCompute, cb_compute);
+
+        std::shared_ptr<stdsc::CallbackFunction> cb_result(
+            new server::CallbackFunctionForResultRequest(param));
+        callback.set(share::kControlCodeDownloadResult, cb_result);
+    }
+
+    std::shared_ptr<stdsc::Server<>> server
+        (new stdsc::Server<>(SERVER_PORT, state, callback));
+    bool enable_async_mode = true;
+    server->start(enable_async_mode);
+
+    std::string key;
+    std::cout << "hit any key to exit server: ";
+    std::cin >> key;
+
+    server->stop();
+    server->wait();
+}    
 
 int main()
 {
     try
     {
-        stdsc::StateContext state(std::make_shared<server::StateInit>());
-
-        server::AddServer server(state, SERVER_PORT);
-        server.start();
-        server.join();
+        STDSC_INIT_LOG();
+        STDSC_LOG_INFO("Start server");
+        run();
     }
     catch (stdsc::AbstractException &e)
     {
