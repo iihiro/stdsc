@@ -19,6 +19,7 @@
 #include <stdsc/stdsc_exception.hpp>
 #include <stdsc/stdsc_client.hpp>
 #include <stdsc/stdsc_buffer.hpp>
+#include <stdsc/stdsc_log.hpp>
 #include <share/define.hpp>
 #include <share/packet.hpp>
 
@@ -64,6 +65,8 @@ int main(int argc, char* argv[])
 {
     try
     {
+        STDSC_INIT_LOG();
+        STDSC_LOG_INFO("Start client");
         std::cout << "Result: " << run() << std::endl;
     }
     catch (stdsc::AbstractException& e)
