@@ -37,10 +37,11 @@ enum ControlCode_t : uint64_t
 
     /* Reserved Code: 0x100-0x1FF */
     kControlCodeGroupReserved = 0x100,
-    kControlCodeAccept = 0x101,
-    kControlCodeReject = 0x102,
-    kControlCodeFailed = 0x103,
-    kControlCodeExit = 0x104,
+    kControlCodeAccept        = 0x101,
+    kControlCodeReject        = 0x102,
+    kControlCodeFailed        = 0x103,
+    kControlCodeConnected     = 0x104,
+    kControlCodeDisConnected  = 0x105,
 
     /* Code for Request packet: 0x200-0x2FF */
     kControlCodeGroupRequest = 0x200,
