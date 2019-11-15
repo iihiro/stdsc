@@ -56,7 +56,7 @@ static void run()
     server->start(enable_async_mode);
 
     std::string key;
-    std::cout << "hit any key to exit server: ";
+    std::cout << "hit any key to exit server: " << std::endl;
     std::cin >> key;
 
     server->stop();
