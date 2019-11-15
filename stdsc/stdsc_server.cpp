@@ -215,7 +215,6 @@ struct ServerThread<T>::Impl
 
     void exec(T& args, std::shared_ptr<ThreadException> te)
     {
-        printf("a1\n");
         while (!args.force_finish)
         {
             try
