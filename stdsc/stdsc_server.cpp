@@ -117,9 +117,7 @@ struct Server<T>::Impl
         {
             try
             {
-                Socket sock =
-                    Socket::accept_connection(listen_socket);
-                    //Socket::accept_connection(listen_socket, RETRY_INTERVAL_SEC);
+                Socket sock = Socket::accept_connection(listen_socket);
                 
                 std::shared_ptr<ResourceContainer>
                     rc(new ResourceContainer(sock, state_, callback_));
