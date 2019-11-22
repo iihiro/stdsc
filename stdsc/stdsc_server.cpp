@@ -88,8 +88,8 @@ struct Server<T>::Impl
 
     private:
         Socket sock_;
-        StateContext state_;
-        CallbackFunctionContainer callback_;
+        StateContext& state_;
+        CallbackFunctionContainer& callback_;
         std::shared_ptr<ServerThread<>> th_;
         bool is_released_;
     };
@@ -144,8 +144,8 @@ public:
     
 private:
     const char* port_;
-    StateContext& state_;
-    CallbackFunctionContainer& callback_;
+    StateContext state_;
+    CallbackFunctionContainer callback_;
 };
 
 template <class T>
