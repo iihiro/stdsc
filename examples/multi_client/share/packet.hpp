@@ -15,35 +15,31 @@
  * limitations under the License.
  */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#ifndef PACKET_HPP
+#define PACKET_HPP
 
-#include <memory>
-#include <stdsc/stdsc_server.hpp>
-#include <server/callback_function.hpp>
-#include <share/define.hpp>
+#include <cstdint>
 
-namespace stdsc
-{
-    class StateContext;
-}
-
-namespace server
+namespace share
 {
 
-struct AddServer
+/**
+ * @brief Enumeration for control code of packet.
+ */
+enum ControlCode_t : uint64_t
 {
-    AddServer(stdsc::StateContext& state, const char* port);
-    ~AddServer(void) = default;
+    /* Code for Request packet: 0x201-0x2FF */
+    kControlCodeRequestCompute = 0x201,
 
-    void start(void);
-    void join(void);
+    /* Code for Data packet: 0x401-0x4FF */
+    kControlCodeValueA = 0x401,
+    kControlCodeValueB = 0x402,
+    kControlCodeDataResult = 0x403,
 
-private:
-    CallbackParam param_;
-    std::shared_ptr<stdsc::Server<>> server_;
+    /* Code for Download packet: 0x801-0x8FF */
+    kControlCodeDownloadResult = 0x801,
 };
 
-} /* namespace server */
+} /* namespace opsica */
 
-#endif /* SERVER_HPP */
+#endif /* PACKET_HPP */
