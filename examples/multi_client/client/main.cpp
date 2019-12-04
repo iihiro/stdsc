@@ -117,15 +117,12 @@ static void run(const uint32_t nthread)
     std::vector<std::shared_ptr<ClientThread<Param>>> cli(nthread);
     std::vector<Param> param(nthread);
 
-    for (auto& c : cli) {
-        c = std::make_shared<ClientThread<Param>>(host, port);
-    }
-    
     for (uint32_t i=0; i<nthread; ++i) {
         param[i].valA   = VALUE_A;
         param[i].valB   = VALUE_B;
         param[i].result = 0;
         auto te = stdsc::ThreadException::create();
+        cli[i] = std::make_shared<ClientThread<Param>>(host, port);
         cli[i]->start(param[i], te);
     }
     for (uint32_t i=0; i<NTHREAD; ++i) {
