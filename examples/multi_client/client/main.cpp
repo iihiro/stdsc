@@ -20,6 +20,8 @@
 #include <chrono>
 #include <cstdio>
 #include <sstream>
+#include <memory>
+#include <array>
 #include <stdsc/stdsc_exception.hpp>
 #include <stdsc/stdsc_client.hpp>
 #include <stdsc/stdsc_buffer.hpp>
@@ -28,7 +30,7 @@
 #include <share/define.hpp>
 #include <share/packet.hpp>
 
-static constexpr uint32_t NTHREAD = 1000;
+static constexpr uint32_t NTHREAD = 10;
 static constexpr uint32_t VALUE_A = 10;
 static constexpr uint32_t VALUE_B = 20;
 
@@ -112,18 +114,21 @@ static void run(const uint32_t nthread)
     const char* host = SERVER_HOST;
     const char* port = SERVER_PORT;
 
-    std::shared_ptr<ClientThread<Param>*[]> cli(new ClientThread<Param>*[nthread]);
-    std::shared_ptr<Param[]> param(new Param[nthread]);
+    std::vector<std::shared_ptr<ClientThread<Param>>> cli(nthread);
+    std::vector<Param> param(nthread);
 
+    for (auto& c : cli) {
+        c = std::make_shared<ClientThread<Param>>(host, port);
+    }
+    
     for (uint32_t i=0; i<nthread; ++i) {
-        cli[i] = new ClientThread<Param>(host, port);
         param[i].valA   = VALUE_A;
         param[i].valB   = VALUE_B;
         param[i].result = 0;
         auto te = stdsc::ThreadException::create();
         cli[i]->start(param[i], te);
     }
-    for (uint32_t i=0; i<nthread; ++i) {
+    for (uint32_t i=0; i<NTHREAD; ++i) {
         cli[i]->join();
         std::cout << "Result of " << param[i].thread_id
                   << " : " << param[i].result << std::endl;
