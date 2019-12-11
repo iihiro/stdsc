@@ -28,16 +28,21 @@ namespace share
  */
 enum ControlCode_t : uint64_t
 {
-    /* Code for Request packet: 0x201-0x2FF */
-    kControlCodeRequestCompute = 0x201,
+    /* Code for Request packet: 0x0201-0x02FF */
+    kControlCodeRequestCompute = 0x0201,
 
-    /* Code for Data packet: 0x401-0x4FF */
-    kControlCodeValueA = 0x401,
-    kControlCodeValueB = 0x402,
-    kControlCodeDataResult = 0x403,
+    /* Code for Data packet: 0x0401-0x04FF */
+    kControlCodeValueA         = 0x0401,
+    kControlCodeValueB         = 0x0402,
+    kControlCodeDataResult     = 0x0403,
 
-    /* Code for Download packet: 0x801-0x8FF */
-    kControlCodeDownloadResult = 0x801,
+#if 1
+    /* Code for UpDownload packet: 0x1000-0x10FF */
+    kControlCodeDownloadResult  = 0x1001,
+#else
+    /* Code for Download packet: 0x0801-0x08FF */
+    kControlCodeDownloadResult  = 0x0801,
+#endif
 };
 
 } /* namespace opsica */
