@@ -55,4 +55,9 @@ int32_t StateContext::current_state(void) const
     return state_->id();
 }
 
+std::string StateContext::current_state_str(void) const
+{
+    return state_->str();
+}
+
 } /* stdsc */
