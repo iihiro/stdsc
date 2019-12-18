@@ -28,7 +28,7 @@ namespace server
 /**
  * @brief Enumeration for state.
  */
-enum StateId_t : uint64_t
+enum StateId_t : int32_t
 {
     kStateNil      = 0,
     kStateInit     = 1,
@@ -57,10 +57,7 @@ struct StateInit : public stdsc::State
     StateInit(bool is_received_valueA = false,
                    bool is_received_valueB = false);
     virtual void set(stdsc::StateContext& sc, uint64_t event) override;
-    virtual uint64_t id(void) const override
-    {
-        return kStateInit;
-    }
+    STDSC_STATE_DEFID(kStateInit);
 
 private:
     bool is_received_valueA_;
@@ -75,10 +72,8 @@ struct StateReady : public stdsc::State
     static std::shared_ptr<State> create();
     StateReady(void);
     virtual void set(stdsc::StateContext& sc, uint64_t event) override;
-    virtual uint64_t id(void) const override
-    {
-        return kStateReady;
-    }
+    STDSC_STATE_DEFID(kStateReady);
+
 };
 
 /**
@@ -89,10 +84,8 @@ struct StateComputed : public stdsc::State
     static std::shared_ptr<State> create();
     StateComputed(void);
     virtual void set(stdsc::StateContext& sc, uint64_t event) override;
-    virtual uint64_t id(void) const override
-    {
-        return kStateComputed;
-    }
+    STDSC_STATE_DEFID(kStateComputed);
+
 };
 
 

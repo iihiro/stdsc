@@ -20,13 +20,28 @@
 
 namespace stdsc
 {
+
+int32_t State::id(void) const
+{
+    return StateUndefined;
+}
+
+std::string State::str(void) const
+{
+    #define STR(id) #id
+    return STR(StateUndefined);
+    #undef STR
+}
+
 StateContext::StateContext(std::shared_ptr<State> state) : state_(state)
 {
 }
 
 void StateContext::next_state(std::shared_ptr<State> next)
 {
-    STDSC_LOG_TRACE("Next state: %lu -> %lu", state_->id(), next->id());
+    STDSC_LOG_TRACE("Next state: %s -> %s",
+                    state_->str().c_str(),
+                    next->str().c_str());
     state_ = next;
 }
 

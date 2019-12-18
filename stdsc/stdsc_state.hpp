@@ -18,7 +18,16 @@
 #ifndef STDSC_STATE_HPP
 #define STDSC_STATE_HPP
 
+#include <string>
 #include <memory>
+
+#define STDSC_STATE_DEFID(_id_)                 \
+    virtual int32_t id(void) const {            \
+        return (_id_);                          \
+    }                                           \
+    virtual std::string str(void) const {       \
+        return #_id_;                           \
+    }                                           \
 
 namespace stdsc
 {
@@ -32,9 +41,15 @@ struct StateContext;
  */
 struct State
 {
+    enum StateId_t : int32_t
+    {
+        StateUndefined = -1,
+    };
+        
     virtual ~State() = default;
     virtual void set(StateContext& sc, uint64_t act) = 0;
-    virtual uint64_t id(void) const = 0;
+    virtual int32_t id(void) const;
+    virtual std::string str(void) const;
 };
 
 /**
