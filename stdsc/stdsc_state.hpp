@@ -60,7 +60,7 @@ struct StateContext
     StateContext(std::shared_ptr<State> state);
     void next_state(std::shared_ptr<State> next);
     void set(uint64_t act);
-    uint64_t current_state(void) const;
+    int32_t current_state(void) const;
 
 private:
     std::shared_ptr<State> state_;

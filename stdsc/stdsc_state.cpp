@@ -50,7 +50,7 @@ void StateContext::set(uint64_t act)
     state_->set(*this, act);
 }
 
-uint64_t StateContext::current_state(void) const
+int32_t StateContext::current_state(void) const
 {
     return state_->id();
 }
