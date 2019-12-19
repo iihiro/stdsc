@@ -17,6 +17,7 @@
 
 #include <unistd.h>
 #include <sstream>
+#include <mutex>
 #include <stdsc/stdsc_client.hpp>
 #include <stdsc/stdsc_socket.hpp>
 #include <stdsc/stdsc_log.hpp>
@@ -59,7 +60,7 @@ struct Client::Impl
 
     ~Impl(void)
     {
-        sock_.close();
+        close();
     }
 
     void connect(const char* host, const char* port,
@@ -71,6 +72,8 @@ struct Client::Impl
         uint32_t max_retry_count =
           calc_retry_count(timeout_sec, retry_interval_usec);
 
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         while (!is_success && max_retry_count > retry_count)
         {
             try
@@ -96,11 +99,15 @@ struct Client::Impl
 
     void close(void)
     {
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         sock_.close();
     }
 
     void send_request(const uint64_t code)
     {
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         STDSC_LOG_TRACE("Send request packet. (code:0x%08x)", code);
         auto control_code = code;
         auto packet = make_packet(control_code);
@@ -128,6 +135,8 @@ struct Client::Impl
 
     void send_data(const uint64_t code, const Buffer& buffer)
     {
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         STDSC_LOG_TRACE("Send data packet. (code:0x%08x, sz:%lu)", code,
                         buffer.size());
         auto size = static_cast<uint64_t>(buffer.size());
@@ -157,6 +166,8 @@ struct Client::Impl
 
     void recv_data(const uint64_t code, Buffer& buffer)
     {
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         STDSC_LOG_TRACE("Send data request packet. (code:0x%08x)", code);
         auto control_code = code;
         auto packet = make_packet(control_code);
@@ -203,6 +214,8 @@ struct Client::Impl
 
     void send_recv_data(const uint64_t code, const Buffer& sbuffer, Buffer& rbuffer)
     {
+        std::lock_guard<std::mutex> lock(mutex_);
+        
         STDSC_LOG_TRACE("Send data packet. (code:0x%08x, sz:%lu)", code,
                         sbuffer.size());
         auto ssize = static_cast<uint64_t>(sbuffer.size());
@@ -248,8 +261,10 @@ struct Client::Impl
             STDSC_THROW_FAILURE(ss.str());
         }
     }
-    
+
+private:
     stdsc::Socket sock_;
+    std::mutex mutex_;
 };
 
 Client::Client(void) : pimpl_(new Impl())
