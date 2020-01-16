@@ -150,7 +150,7 @@ static void run(const uint32_t nthread)
     for (uint32_t i=0; i<NTHREAD; ++i) {
         cli[i]->join();
         verify += param[i].result;
-        std::string res = (verify) ? "True" : "False";
+        std::string res = (param[i].result) ? "True" : "False";
         std::cout << "[" << param[i].thread_id << "] "
                   << "Result of comparision: " << res << std::endl;
     }
